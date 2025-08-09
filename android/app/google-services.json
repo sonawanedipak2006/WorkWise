@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1021387198934",
+    "project_id": "workwise-e00b9",
+    "storage_bucket": "workwise-e00b9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021387198934:android:d2f590542382d280cd1477",
+        "android_client_info": {
+          "package_name": "com.workwise"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaA3qM5CCkgZDWOT8VJmSGiwvXo0271sk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
