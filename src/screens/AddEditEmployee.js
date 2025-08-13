@@ -1,7 +1,7 @@
 //AddEditEmployee
 
 
-
+{/*}
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -153,5 +153,169 @@ const styles = StyleSheet.create({
 });
 
 
+*/}
+
+// AddEditEmployee.js
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  ScrollView,
+} from "react-native";
+
+const AddEditEmployee = ({ route, navigation }) => {
+  const { employee, onSave } = route.params || {};
+
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
+  const [role, setRole] = useState("");
+  const [department, setDepartment] = useState("");
+  const [joinDate, setJoinDate] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [notes, setNotes] = useState("");
+
+  useEffect(() => {
+    if (employee) {
+      setId(employee.id);
+      setName(employee.name);
+      setRole(employee.role);
+      setDepartment(employee.department);
+      setJoinDate(employee.joinDate);
+      setPhone(employee.phone);
+      setEmail(employee.email);
+      setAddress(employee.address);
+      setNotes(employee.notes);
+    }
+  }, [employee]);
+
+  const handleSave = () => {
+    if (!name || !role || !department || !joinDate || !phone || !email || !address) {
+      Alert.alert("❗ Missing Info", "Please fill in all required fields.");
+      return;
+    }
+
+    const updatedEmployee = {
+      id: id || Date.now().toString(),
+      name,
+      role,
+      department,
+      joinDate,
+      phone,
+      email,
+      address,
+      notes,
+    };
+
+    onSave?.(updatedEmployee);
+    Alert.alert("✅ Success", `${employee ? "Updated" : "Added"} successfully`);
+    navigation.goBack();
+  };
+
+  const renderInput = (label, value, setValue, placeholder, editable = true, keyboardType = "default", multiline = false) => (
+    <View style={styles.inputContainer}>
+      <Text style={styles.label}>{label}</Text>
+      <TextInput
+        style={[styles.input, !editable && styles.disabledInput]}
+        value={value}
+        onChangeText={setValue}
+        placeholder={placeholder}
+        editable={editable}
+        keyboardType={keyboardType}
+        multiline={multiline}
+        placeholderTextColor="#aaa"
+      />
+    </View>
+  );
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>
+        {employee ? "✏️ Edit Employee" : "➕ Add New Employee"}
+      </Text>
+
+      {renderInput("👤 Full Name", name, setName, "Enter full name")}
+      {renderInput("🆔 Employee ID", id, setId, "Auto-generated", false)}
+      {renderInput("💼 Role / Designation", role, setRole, "e.g. Software Engineer")}
+      {renderInput("🏢 Department", department, setDepartment, "e.g. Development")}
+      {renderInput("📅 Join Date", joinDate, setJoinDate, "YYYY-MM-DD")}
+      {renderInput("📞 Phone Number", phone, setPhone, "e.g. 9876543210", true, "phone-pad")}
+      {renderInput("📧 Email Address", email, setEmail, "e.g. name@example.com", true, "email-address")}
+      {renderInput("🏠 Address", address, setAddress, "Enter address", true, "default", true)}
+      {renderInput("📝 Remarks / Notes", notes, setNotes, "Optional", true, "default", true)}
+
+      <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+        <Text style={styles.saveButtonText}>💾 Save Employee</Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
+};
+
+export default AddEditEmployee;
+
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 20,
+    backgroundColor: "#f4f6f8",
+    flexGrow: 1,
+  },
+  
+
+  title: {
+    fontSize: 26,
+    fontWeight: "bold",
+    marginBottom: 25,
+    textAlign: "center",
+    color: "#333",
+  },
+  inputContainer: {
+    marginBottom: 15,
+  },
+  label: {
+    fontSize: 15,
+    marginBottom: 6,
+    fontWeight: "600",
+    color: "#444",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    padding: 12,
+    borderRadius: 12,
+    backgroundColor: "#fff",
+    fontSize: 15,
+    elevation: 2, // Android shadow
+    shadowColor: "#000", // iOS shadow
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+  },
+  disabledInput: {
+    backgroundColor: "#eee",
+    color: "#666",
+  },
+  saveButton: {
+    backgroundColor: "#007bff",
+    paddingVertical: 15,
+    borderRadius: 12,
+    marginTop: 25,
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 4,
+  },
+  saveButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 17,
+  },
+});
 
 
