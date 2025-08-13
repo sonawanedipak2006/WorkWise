@@ -194,7 +194,7 @@ const SettingsScreen = () => {
       {
         text: 'Logout',
         style: 'destructive',
-        onPress: () => navigation.navigate('Login'),
+        onPress: () => navigation.navigate('LoginScreen'),
       },
     ]);
   };
@@ -208,7 +208,7 @@ const SettingsScreen = () => {
   };
 
   const openSupportEmail = () => {
-    Linking.openURL('mailto:support@yourapp.com?subject=Support Needed');
+    Linking.openURL('mailto:sonawanedipak2006@gmail.com?subject=Support Needed');
   };
 
   const openPrivacyPolicy = () => {
@@ -224,26 +224,8 @@ const SettingsScreen = () => {
       <Text style={[styles.title, { color: textColor }]}>⚙️ Settings</Text>
 
      
-      {/* Profile */}
-      <TouchableOpacity
-        style={[styles.card, { backgroundColor: cardColor }]}
-        onPress={() => navigation.navigate('EmployeeProfile')}
-      >
-        <View style={styles.optionRow}>
-          <Ionicons name="person" size={24} color={textColor} />
-          <Text style={[styles.optionText, { color: textColor }]}>Profile Settings</Text>
-        </View>
-      </TouchableOpacity>
-
-      {/* Change Password */}
-      <TouchableOpacity style={[styles.card, { backgroundColor: cardColor }]}>
-        <View style={styles.optionRow}>
-          <Ionicons name="key" size={24} color={textColor} />
-          <Text style={[styles.optionText, { color: textColor }]}>Change Password</Text>
-        </View>
-      </TouchableOpacity>
-
-      {/* Help */}
+  
+    
       <TouchableOpacity style={[styles.card, { backgroundColor: cardColor }]} onPress={openHelp}>
         <View style={styles.optionRow}>
           <Ionicons name="help-circle" size={24} color={textColor} />
@@ -251,7 +233,6 @@ const SettingsScreen = () => {
         </View>
       </TouchableOpacity>
 
-      {/* Contact Support */}
       <TouchableOpacity style={[styles.card, { backgroundColor: cardColor }]} onPress={openSupportEmail}>
         <View style={styles.optionRow}>
           <Ionicons name="mail" size={24} color={textColor} />
@@ -259,7 +240,7 @@ const SettingsScreen = () => {
         </View>
       </TouchableOpacity>
 
-      {/* Privacy Policy */}
+      
       <TouchableOpacity style={[styles.card, { backgroundColor: cardColor }]} onPress={openPrivacyPolicy}>
         <View style={styles.optionRow}>
           <Ionicons name="document-text" size={24} color={textColor} />
@@ -267,7 +248,7 @@ const SettingsScreen = () => {
         </View>
       </TouchableOpacity>
 
-      {/* Report Bug */}
+      
       <TouchableOpacity
         style={[styles.card, { backgroundColor: cardColor }]}
         onPress={reportIssue}
@@ -278,7 +259,7 @@ const SettingsScreen = () => {
         </View>
       </TouchableOpacity>
 
-      {/* Logout */}
+      
       <TouchableOpacity
         style={[styles.card, { backgroundColor: '#ff6b6b' }]}
         onPress={confirmLogout}
@@ -326,3 +307,5 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
 });
+
+

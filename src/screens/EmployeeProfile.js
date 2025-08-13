@@ -162,11 +162,45 @@ const styles = StyleSheet.create({
 */}
 
 
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+// src/screens/EmployeeProfile.js
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { getUserProfile } from '../utils/profileStorage';
 
 const EmployeeProfile = ({ route }) => {
-  const { employee } = route.params;
+  const [employee, setEmployee] = useState(route?.params?.employee || null);
+  const [loading, setLoading] = useState(!route?.params?.employee);
+
+  useEffect(() => {
+    if (!employee) {
+      (async () => {
+        try {
+          const p = await getUserProfile();
+          setEmployee(p);
+        } catch (e) {
+          Alert.alert('Error', 'Could not load profile');
+        } finally {
+          setLoading(false);
+        }
+      })();
+    }
+  }, [employee]);
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  if (!employee) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
+        <Text style={{ textAlign: 'center' }}>No profile found.</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -198,47 +232,17 @@ const ProfileItem = ({ label, value }) => (
 export default EmployeeProfile;
 
 const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    backgroundColor: '#eaf1f8',
-    padding: 20,
-  },
+  container: { flexGrow: 1, backgroundColor: '#eaf1f8', padding: 20 },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#1f3c88',
-    marginBottom: 20,
-    textAlign: 'center',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
+    fontSize: 28, fontWeight: 'bold', color: '#1f3c88', marginBottom: 20,
+    textAlign: 'center', textTransform: 'uppercase', letterSpacing: 1,
   },
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 24,
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 3 },
-    shadowRadius: 6,
+    backgroundColor: '#fff', borderRadius: 20, padding: 24, elevation: 5,
+    shadowColor: '#000', shadowOpacity: 0.1, shadowOffset: { width: 0, height: 3 }, shadowRadius: 6,
   },
-  item: {
-    marginBottom: 16,
-  },
-  label: {
-    fontSize: 13,
-    color: '#5a5a5a',
-    fontWeight: '600',
-    marginBottom: 4,
-  },
-  value: {
-    fontSize: 16,
-    color: '#1c1c1c',
-    fontWeight: '500',
-  },
-  divider: {
-    height: 1,
-    backgroundColor: '#ddd',
-    marginTop: 12,
-  },
+  item: { marginBottom: 16 },
+  label: { fontSize: 13, color: '#5a5a5a', fontWeight: '600', marginBottom: 4 },
+  value: { fontSize: 16, color: '#1c1c1c', fontWeight: '500' },
+  divider: { height: 1, backgroundColor: '#ddd', marginTop: 12 },
 });
