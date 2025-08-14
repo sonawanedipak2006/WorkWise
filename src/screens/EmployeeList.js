@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
 */}
 
 // EmployeeList
-
+{/*}
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -278,13 +278,11 @@ const EmployeeList = () => {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#667eea" />
       
-      {/* Background Gradient */}
       <LinearGradient
         colors={['#667eea', '#764ba2']}
         style={styles.backgroundGradient}
       />
       
-      {/* Floating Elements */}
       <View style={styles.floatingCircle1} />
       <View style={styles.floatingCircle2} />
       <View style={styles.floatingCircle3} />
@@ -303,7 +301,6 @@ const EmployeeList = () => {
             },
           ]}
         >
-          {/* Header Section */}
           <View style={styles.headerSection}>
             <View style={styles.logoContainer}>
               <LinearGradient
@@ -317,9 +314,7 @@ const EmployeeList = () => {
             <Text style={styles.subheading}>Find and manage your team</Text>
           </View>
 
-          {/* Form Section */}
           <View style={styles.formContainer}>
-            {/* Search Input */}
             <View style={styles.inputContainer}>
               <View style={styles.inputIconContainer}>
                 <Ionicons name="search-outline" size={20} color="#667eea" />
@@ -333,7 +328,6 @@ const EmployeeList = () => {
               />
             </View>
 
-            {/* Sort Button */}
             <TouchableOpacity 
               style={styles.buttonContainer}
               onPress={() => setSortAZ(!sortAZ)}
@@ -352,7 +346,6 @@ const EmployeeList = () => {
               </LinearGradient>
             </TouchableOpacity>
 
-            {/* Employee Count */}
             <View style={styles.countContainer}>
               <Text style={styles.countText}>
                 {filtered.length} employee{filtered.length !== 1 ? 's' : ''} found
@@ -360,10 +353,340 @@ const EmployeeList = () => {
             </View>
           </View>
 
-          {/* Employee List */}
           <FlatList
             data={filtered}
             keyExtractor={(item) => item.id}
+            renderItem={renderItem}
+            contentContainerStyle={styles.listContainer}
+            showsVerticalScrollIndicator={false}
+            scrollEnabled={false}
+          />
+        </Animated.View>
+      </ScrollView>
+    </View>
+  );
+};
+
+export default EmployeeList;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f8fafc',
+  },
+  backgroundGradient: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: height * 0.4,
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
+  },
+  floatingCircle1: {
+    position: 'absolute',
+    top: 80,
+    right: 30,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  floatingCircle2: {
+    position: 'absolute',
+    top: 150,
+    left: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+  },
+  floatingCircle3: {
+    position: 'absolute',
+    top: 200,
+    right: 80,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.06)',
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  contentContainer: {
+    flex: 1,
+    paddingTop: 60,
+  },
+  headerSection: {
+    alignItems: 'center',
+    marginBottom: 40,
+  },
+  logoContainer: {
+    marginBottom: 20,
+  },
+  logo: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 10,
+  },
+  heading: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 8,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+  },
+  subheading: {
+    fontSize: 16,
+    color: 'rgba(255, 255, 255, 0.9)',
+    textAlign: 'center',
+  },
+  formContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    padding: 30,
+    marginHorizontal: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.15,
+    shadowRadius: 20,
+    elevation: 10,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f8fafc',
+    borderRadius: 16,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+    paddingHorizontal: 16,
+    height: 56,
+  },
+  inputIconContainer: {
+    marginRight: 12,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    color: '#2d3748',
+    fontWeight: '500',
+  },
+  buttonContainer: {
+    borderRadius: 16,
+    overflow: 'hidden',
+    shadowColor: '#667eea',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginLeft: 8,
+  },
+  countContainer: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  countText: {
+    fontSize: 16,
+    color: '#64748b',
+    fontWeight: '600',
+  },
+  listContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 20,
+    paddingBottom: 30,
+  },
+  cardContainer: {
+    marginBottom: 16,
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  avatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  avatarText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  cardInfo: {
+    flex: 1,
+  },
+  name: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#1f2937',
+    marginBottom: 4,
+  },
+  role: {
+    fontSize: 14,
+    color: '#64748b',
+    fontWeight: '600',
+  },
+  cardDetails: {
+    borderTopWidth: 1,
+    borderTopColor: '#f1f5f9',
+    paddingTop: 16,
+  },
+  detailRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  detailText: {
+    marginLeft: 8,
+    fontSize: 14,
+    color: '#64748b',
+    fontWeight: '500',
+  },
+});
+*/}
+
+import React, { useState, useEffect } from 'react';
+import {
+  View, Text, FlatList, TextInput, TouchableOpacity,
+  StyleSheet, Dimensions, Animated, StatusBar, ScrollView,
+} from 'react-native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
+import firestore from '@react-native-firebase/firestore';
+import LinearGradient from 'react-native-linear-gradient';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+const { width, height } = Dimensions.get('window');
+
+const EmployeeList = () => {
+  const navigation = useNavigation();
+  const isFocused = useIsFocused();
+  const [searchText, setSearchText] = useState('');
+  const [sortAZ, setSortAZ] = useState(true);
+  const [employees, setEmployees] = useState([]);
+  const [fadeAnim] = useState(new Animated.Value(0));
+  const [scaleAnim] = useState(new Animated.Value(0.8));
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, { toValue: 1, duration: 1000, useNativeDriver: true }),
+      Animated.spring(scaleAnim, { toValue: 1, tension: 50, friction: 7, useNativeDriver: true }),
+    ]).start();
+  }, []);
+
+  useEffect(() => {
+    if (!isFocused) return;
+
+    const subscriber = firestore()
+      .collection('employees')
+      .onSnapshot(querySnapshot => {
+        const list = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setEmployees(list);
+      }, error => {
+        console.error('Firestore fetch error:', error);
+      });
+
+    return () => subscriber();
+  }, [isFocused]);
+
+  const filtered = employees
+    .filter(emp => emp.name.toLowerCase().includes(searchText.toLowerCase()))
+    .sort((a, b) => {
+      const aName = a.name.toLowerCase();
+      const bName = b.name.toLowerCase();
+      const searchLower = searchText.toLowerCase();
+      const aStarts = aName.startsWith(searchLower);
+      const bStarts = bName.startsWith(searchLower);
+      if (aStarts && !bStarts) return -1;
+      if (!aStarts && bStarts) return 1;
+      return sortAZ ? aName.localeCompare(bName) : bName.localeCompare(aName);
+    });
+
+  const renderItem = ({ item }) => (
+    <Animated.View style={[styles.cardContainer, {
+      opacity: fadeAnim,
+      transform: [{ translateY: fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [30, 0] }) }],
+    }]}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('EmployeeProfile', { employee: item })}
+        style={styles.card}
+        activeOpacity={0.8}
+      >
+        <View style={styles.cardHeader}>
+          <LinearGradient colors={['#667eea', '#764ba2']} style={styles.avatar}>
+            <Text style={styles.avatarText}>
+              {item.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+            </Text>
+          </LinearGradient>
+          <View style={styles.cardInfo}>
+            <Text style={styles.name}>{item.name}</Text>
+            <Text style={styles.role}>{item.role}</Text>
+          </View>
+        </View>
+        <View style={styles.cardDetails}>
+          <View style={styles.detailRow}>
+            <Ionicons name="calendar-outline" size={16} color="#64748b" />
+            <Text style={styles.detailText}>Joined: {item.joinDate}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    </Animated.View>
+  );
+
+  return (
+    <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#667eea" />
+      <LinearGradient colors={['#667eea', '#764ba2']} style={styles.backgroundGradient} />
+      <View style={styles.floatingCircle1} />
+      <View style={styles.floatingCircle2} />
+      <View style={styles.floatingCircle3} />
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <Animated.View style={[styles.contentContainer, { opacity: fadeAnim, transform: [{ scale: scaleAnim }] }]}>
+          {/* header, search form, sort button etc remain same */}
+          {/* ... */}
+          <FlatList
+            data={filtered}
+            keyExtractor={item => item.id}
             renderItem={renderItem}
             contentContainerStyle={styles.listContainer}
             showsVerticalScrollIndicator={false}

@@ -426,11 +426,11 @@ import StatsScreen from './src/screens/StatsScreen';
 import DocumentsScreen from './src/screens/DocumentsScreen';
 import HelpScreen from './src/screens/HelpScreen';
 import MyTeamScreen from './src/screens/MyTeamScreen';
-
+import Toast from 'react-native-toast-message';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  return (
+  return (<>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="LoginScreen" screenOptions={{ headerShown: false }}>
         {/* Auth Screens */}
@@ -467,7 +467,11 @@ export default function App() {
         <Stack.Screen name="DocumentsScreen" component={DocumentsScreen} />
         <Stack.Screen name="HelpScreen" component={HelpScreen} />
         <Stack.Screen name="MyTeamScreen" component={MyTeamScreen} />
+
       </Stack.Navigator>
     </NavigationContainer>
+    <Toast />
+    
+    </>
   );
 }

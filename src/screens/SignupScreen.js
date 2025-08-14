@@ -930,7 +930,7 @@ const styles = StyleSheet.create({
 });
 */}
 
-
+{/*}
 // src/screens/SignupScreen.js// src/screens/SignupScreen.js
 import React, { useRef, useState } from 'react';
 import {
@@ -999,6 +999,198 @@ const onSignup = async () => {
     setLoading(false);
   }
 };
+  return (
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
+    >
+      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+        <Text style={styles.title}>Create Account</Text>
+
+        <View style={styles.inputWrap}>
+          <Icon name="person-outline" size={20} style={styles.inputIcon} />
+          <TextInput
+            style={styles.input}
+            placeholder="Full Name"
+            value={fullName}
+            onChangeText={setFullName}
+            returnKeyType="next"
+            autoCapitalize="words"
+            autoCorrect={false}
+            onSubmitEditing={() => emailRef.current?.focus()}
+          />
+        </View>
+
+        <View style={styles.inputWrap}>
+          <Icon name="mail-outline" size={20} style={styles.inputIcon} />
+          <TextInput
+            ref={emailRef}
+            style={styles.input}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            returnKeyType="next"
+            onSubmitEditing={() => phoneRef.current?.focus()}
+          />
+        </View>
+
+        <View style={styles.inputWrap}>
+          <Icon name="call-outline" size={20} style={styles.inputIcon} />
+          <TextInput
+            ref={phoneRef}
+            style={styles.input}
+            placeholder="Phone (10 digits)"
+            value={phone}
+            onChangeText={setPhone}
+            keyboardType="number-pad"
+            maxLength={10}
+            returnKeyType="next"
+            onSubmitEditing={() => passRef.current?.focus()}
+          />
+        </View>
+
+        <View style={styles.inputWrap}>
+          <Icon name="lock-closed-outline" size={20} style={styles.inputIcon} />
+          <TextInput
+            ref={passRef}
+            style={styles.input}
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPass}
+            returnKeyType="next"
+            onSubmitEditing={() => confirmRef.current?.focus()}
+          />
+          <TouchableOpacity onPress={() => setShowPass(p => !p)} style={styles.eye}>
+            <Icon name={showPass ? 'eye-off-outline' : 'eye-outline'} size={20} />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.inputWrap}>
+          <Icon name="shield-checkmark-outline" size={20} style={styles.inputIcon} />
+          <TextInput
+            ref={confirmRef}
+            style={styles.input}
+            placeholder="Confirm Password"
+            value={confirm}
+            onChangeText={setConfirm}
+            secureTextEntry={!showConfirm}
+            returnKeyType="done"
+            onSubmitEditing={onSignup}
+          />
+          <TouchableOpacity onPress={() => setShowConfirm(c => !c)} style={styles.eye}>
+            <Icon name={showConfirm ? 'eye-off-outline' : 'eye-outline'} size={20} />
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity
+          style={[styles.primaryBtn, loading && { opacity: 0.6 }]}
+          onPress={onSignup}
+          disabled={loading}
+        >
+          <Text style={styles.primaryText}>{loading ? 'Creating...' : 'Sign Up'}</Text>
+        </TouchableOpacity>
+
+        <View style={styles.row}>
+          <Text style={styles.small}>Already have an account? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
+            <Text style={[styles.small, { color: '#3b82f6', fontWeight: '700' }]}>Log In</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { padding: 20, paddingTop: 40, flexGrow: 1, backgroundColor: '#f8fafc' },
+  title: { fontSize: 26, fontWeight: '800', marginBottom: 24, color: '#0f172a' },
+  inputWrap: {
+    flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 14,
+    borderWidth: 1, borderColor: '#e5e7eb', paddingHorizontal: 12, marginBottom: 14, height: 52,
+  },
+  inputIcon: { marginRight: 8, color: '#475569' },
+  input: { flex: 1, fontSize: 16, color: '#111827' },
+  eye: { paddingHorizontal: 8, paddingVertical: 6 },
+  primaryBtn: {
+    height: 52, backgroundColor: '#2563eb', borderRadius: 14, alignItems: 'center', justifyContent: 'center', marginTop: 8,
+  },
+  primaryText: { color: '#fff', fontSize: 16, fontWeight: '700', letterSpacing: 0.2 },
+  row: { flexDirection: 'row', justifyContent: 'center', marginTop: 14 },
+  small: { color: '#334155', fontSize: 14 },
+});
+*/}import React, { useRef, useState } from 'react';
+import {
+  View, Text, TextInput, TouchableOpacity, StyleSheet,
+  KeyboardAvoidingView, Platform, ScrollView
+} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import auth from '@react-native-firebase/auth';
+import Toast from 'react-native-toast-message';
+
+export default function SignupScreen({ navigation }) {
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const emailRef = useRef(null);
+  const phoneRef = useRef(null);
+  const passRef = useRef(null);
+  const confirmRef = useRef(null);
+
+  const validate = () => {
+    if (fullName.trim().length < 2) return { ok: false, msg: 'Please enter a valid full name.' };
+    if (!/^\S+@\S+\.\S+$/.test(email.trim())) return { ok: false, msg: 'Please enter a valid email.' };
+    if (!/^[0-9]{10}$/.test(phone.trim())) return { ok: false, msg: 'Phone must be 10 digits.' };
+    if (password.length < 6) return { ok: false, msg: 'Password must be at least 6 characters.' };
+    if (password !== confirm) return { ok: false, msg: 'Passwords do not match.' };
+    return { ok: true };
+  };
+
+  const onSignup = async () => {
+    const v = validate();
+    if (!v.ok) {
+      Toast.show({ type: 'error', text1: 'Validation Error', text2: v.msg });
+      return;
+    }
+    try {
+      setLoading(true);
+
+      const userCredential = await auth().createUserWithEmailAndPassword(email.trim(), password);
+
+      await userCredential.user.updateProfile({ displayName: fullName });
+
+      Toast.show({
+        type: 'success',
+        text1: 'Account Created',
+        text2: 'You can now log in.',
+        onHide: () => navigation.replace('LoginScreen'),
+      });
+
+    } catch (e) {
+      let message = e.message || 'Something went wrong';
+      if (e.code === 'auth/email-already-in-use') {
+        message = 'This email is already registered.';
+      } else if (e.code === 'auth/invalid-email') {
+        message = 'Invalid email address.';
+      } else if (e.code === 'auth/weak-password') {
+        message = 'Password is too weak (min 6 characters).';
+      }
+
+      Toast.show({ type: 'error', text1: 'Signup Failed', text2: message });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}

@@ -1000,7 +1000,7 @@ const styles = StyleSheet.create({
     color: '#007bff',
   },
 });
-*/}
+*/}{/*}
 import React, { useState } from 'react';
 import {
   View,
@@ -1081,6 +1081,146 @@ export default function LoginScreen({ navigation }) {
         secureTextEntry
       />
 
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: '#ff9800' }]}
+        onPress={handleAdminLogin}
+      >
+        <Text style={styles.buttonText}>Admin Login</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: '#007bff', marginTop: 10 }]}
+        onPress={handleEmployeeLogin}
+        disabled={loading}
+      >
+        <Text style={styles.buttonText}>
+          {loading ? 'Logging in...' : 'Employee Login'}
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate('SignupScreen')}>
+        <Text style={styles.link}>Don't have an account? Sign up</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 30,
+    textAlign: 'center',
+  },
+  input: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    marginBottom: 15,
+  },
+  button: {
+    padding: 15,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  link: {
+    marginTop: 15,
+    textAlign: 'center',
+    color: '#007bff',
+  },
+});
+*/}
+
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from 'react-native';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+
+export default function LoginScreen({ navigation }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // 🔹 Admin Login
+  const handleAdminLogin = () => {
+    if (email === 'admin@gmail.com' && password === '55555') {
+      navigation.replace('Admin'); // ✅ No success alert
+    } else {
+      Alert.alert('Error', 'Invalid admin credentials');
+    }
+  };
+
+  // 🔹 Employee Login
+  const handleEmployeeLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please enter email and password');
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const userCredential = await auth().signInWithEmailAndPassword(email, password);
+
+      const userDoc = await firestore()
+        .collection('employees')
+        .doc(userCredential.user.uid)
+        .get();
+
+      if (userDoc.exists) {
+        navigation.replace('HomeScreen'); // ✅ No success alert
+      } else {
+        await auth().signOut();
+        Alert.alert('Error', 'You are not registered as an employee');
+      }
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Login Failed', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Login</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+
       {/* Admin Login Button */}
       <TouchableOpacity
         style={[styles.button, { backgroundColor: '#ff9800' }]}
@@ -1100,6 +1240,7 @@ export default function LoginScreen({ navigation }) {
         </Text>
       </TouchableOpacity>
 
+      {/* Signup Redirect */}
       <TouchableOpacity onPress={() => navigation.navigate('SignupScreen')}>
         <Text style={styles.link}>Don't have an account? Sign up</Text>
       </TouchableOpacity>
